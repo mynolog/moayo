@@ -1,18 +1,19 @@
+import type { Review } from "@/types/review";
 import { Request, Response } from "express";
-import Review from "@/models/review.model";
+import ReviewModel from "@/models/review.model";
 
 // 리뷰 생성 - Create
 export const createReview = async (
-  req: Request,
+  req: Request<{}, {}, Review>,
   res: Response
 ): Promise<void> => {
-  try {
-    const { isbn, userId, reviewText, rating } = req.body;
+  const { isbn, userId, content, rating } = req.body;
 
-    const newReview = new Review({
+  try {
+    const newReview = new ReviewModel({
       isbn,
       userId,
-      reviewText,
+      content,
       rating,
     });
 
@@ -33,7 +34,7 @@ export const getReviewsByIsbn = async (
 ): Promise<void> => {
   const { isbn } = req.params;
   try {
-    const reviews = await Review.find({ isbn });
+    const reviews = await ReviewModel.find({ isbn });
 
     if (reviews.length === 0 || !reviews) {
       res.status(404).json({ message: "해당 도서의 리뷰를 찾을 수 없습니다." });
