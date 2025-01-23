@@ -1,18 +1,18 @@
-import express, { Request, Response } from "express";
+import dotenv from "dotenv";
+import express from "express";
 import cors from "cors";
 import { corsOptions } from "./config/cors";
 
-const app = express();
+dotenv.config();
 
+const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors(corsOptions));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("hello, ts with express");
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.listen(PORT, () => {
-  console.log("\n");
-  console.log(`→ Server running at: http://localhost:${PORT}`);
+  console.log(`\n→ Server running at: http://localhost:${PORT}`);
 });
