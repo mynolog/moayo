@@ -1,8 +1,12 @@
 {
-	"dependencies": {
-		"bcrypt": "^5.1.1"
-	},
-	"devDependencies": {
-		"@types/bcrypt": "^5.0.2"
-	}
+  "name": "moayo",
+  "version": "1.0.0",
+  "description": "VueJS, Express로 만드는 책 추천, 검색 플랫폼",
+  "scripts": {
+    "dev:frontend": "cd frontend && pnpm run dev",
+    "dev:backend": "cd backend && pnpm run dev"
+  },
+  "keywords": [],
+  "author": "mynolog",
+  "license": "ISC"
 }
