@@ -1,9 +1,6 @@
-import { Router } from "express";
-import {
-  createReview,
-  getReviewsByIsbn,
-} from "@/controllers/review.controllers";
-import { ROUTES } from "./apiRoutes";
+import { Router } from 'express';
+import { createReview, getReviewsByIsbn } from '@/controllers/review.controllers';
+import { ROUTES } from './apiRoutes';
 
 const router = Router();
 

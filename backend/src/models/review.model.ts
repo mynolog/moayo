@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document } from 'mongoose';
 
 interface ReviewSchemaDocument extends Document {
   isbn: string;
@@ -14,8 +14,8 @@ const ReviewSchema = new Schema<ReviewSchemaDocument>(
     rating: { type: Number, min: 1, max: 10, required: true },
     content: { type: String, required: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Review = model("Review", ReviewSchema);
+const Review = model('Review', ReviewSchema);
 export default Review;

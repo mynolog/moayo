@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const connectDB = async (mongoURI: string) => {
   try {
     await mongoose.connect(mongoURI, {
-      dbName: "books",
+      dbName: 'books',
     });
-    console.log("→ MongoDB Atlas connected successfully");
+    console.log('→ MongoDB Atlas connected successfully');
   } catch (error) {
-    console.error("Error connecting to MongoDB Atlas: ", error);
+    console.error('Error connecting to MongoDB Atlas: ', error);
     process.exit(1);
   }
 };

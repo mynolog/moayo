@@ -3,7 +3,7 @@ export interface User {
   email: string;
   password: string;
   birthDate?: Date;
-  gender?: "male" | "female" | "other";
+  gender?: 'male' | 'female' | 'other';
 }
 
 // 회원가입 유저 타입

@@ -1,7 +1,7 @@
-import Router from "express";
-import reviewRoutes from "./review.routes";
-import userRoutes from "./user.routes";
-import { ROUTES } from "@/routes/apiRoutes";
+import Router from 'express';
+import reviewRoutes from './review.routes';
+import userRoutes from './user.routes';
+import { ROUTES } from '@/routes/apiRoutes';
 
 const router = Router();
 

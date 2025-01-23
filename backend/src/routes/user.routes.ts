@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { signUpUser } from "@/controllers/user.controllers";
-import { ROUTES } from "./apiRoutes";
+import { Router } from 'express';
+import { signUpUser } from '@/controllers/user.controllers';
+import { ROUTES } from './apiRoutes';
 
 const router = Router();
 
