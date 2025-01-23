@@ -1,9 +1,10 @@
-import express from "express";
+import { Router } from "express";
 import {
   createReview,
   getReviewsByIsbn,
 } from "@/controllers/review.controllers";
-const router = express.Router();
+
+const router = Router();
 
 router.post("/", createReview);
 router.get("/:isbn", getReviewsByIsbn);
