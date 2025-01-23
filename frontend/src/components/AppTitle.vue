@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-const title = ref("moayo");
+import { ref } from 'vue';
+const title = ref('moayo');
 </script>
 
 <style scoped></style>

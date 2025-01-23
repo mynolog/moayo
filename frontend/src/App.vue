@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import AppTitle from "@/components/AppTitle.vue";
+import AppTitle from '@/components/AppTitle.vue';
 </script>
 
 <style scoped></style>
