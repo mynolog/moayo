@@ -10,3 +10,5 @@ export interface User {
 export interface SignUpUser extends User {
   confirmPassword: string;
 }
+
+export interface SignInUser extends Pick<User, 'email' | 'password'> {}
