@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   parser: 'vue-eslint-parser',
   extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:prettier/recommended'],
   parserOptions: {
