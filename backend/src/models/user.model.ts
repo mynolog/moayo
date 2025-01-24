@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 interface UserSchemaDocument extends User, Document {
   hashPassword: (password: string) => Promise<string>;
-  comparePassword: (password: string) => Promise<boolean>;
+  verifyPassword: (password: string) => Promise<boolean>;
 }
 
 const UserSchema = new Schema<UserSchemaDocument>(
@@ -28,7 +28,7 @@ UserSchema.methods.hashPassword = async function (password: string): Promise<str
   return await bcrypt.hash(password, salt);
 };
 
-UserSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+UserSchema.methods.verifyPassword = async function (password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 
