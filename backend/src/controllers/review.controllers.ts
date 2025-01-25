@@ -4,12 +4,13 @@ import ReviewModel from '@/models/review.model';
 
 // 리뷰 생성 - Create
 export const createReview = async (req: Request<{}, {}, Review>, res: Response): Promise<void> => {
-  const { isbn, userId, content, rating } = req.body;
+  const { isbn, userId, title, content, rating } = req.body;
 
   try {
     const newReview = new ReviewModel({
       isbn,
       userId,
+      title,
       content,
       rating,
     });

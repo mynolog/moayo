@@ -8,4 +8,6 @@ export const ROUTES = {
 
   REVIEWS: '/reviews',
   ISBN: '/:isbn',
+
+  BOOKS: '/books',
 } as const;

@@ -1,13 +1,17 @@
-import type { User } from '@/types/user';
 import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-interface UserSchemaDocument extends User, Document {
+interface UserDocument extends Document {
+  nickName: string;
+  email: string;
+  password: string;
+  birthDate?: Date;
+  gender?: 'male' | 'female' | 'other';
   hashPassword: (password: string) => Promise<string>;
   verifyPassword: (password: string) => Promise<boolean>;
 }
 
-const UserSchema = new Schema<UserSchemaDocument>(
+const UserSchema = new Schema<UserDocument>(
   {
     nickName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
