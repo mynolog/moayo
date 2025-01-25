@@ -8,10 +8,18 @@ export const createReview = async (
   req: Request<ReviewParams, {}, ReviewBody>,
   res: Response,
 ): Promise<void> => {
-  try {
-    await createReviewService(req.params, req.body);
+  const { isbn13 } = req.params;
+  const { userId, title, rating } = req.body;
 
-    res.status(201).json({ message: '리뷰가 정상적으로 등록되었습니다.' });
+  if (!isbn13 || !userId || !title || !rating) {
+    res.status(400).json({ message: '필수 값이 누락되었습니다.' });
+    return;
+  }
+
+  try {
+    const response = await createReviewService(req.params, req.body);
+
+    res.status(201).json({ message: '리뷰가 정상적으로 등록되었습니다.', newReview: response });
   } catch (error) {
     if (error instanceof ReviewError) {
       res.status(error.statusCode).json({ message: error.message });
