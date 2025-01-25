@@ -2,7 +2,7 @@ import Router from 'express';
 import reviewRoutes from './review.routes';
 import userRoutes from './user.routes';
 import bookRoutes from './book.routes';
-import { ROUTES } from '@/routes/apiRoutes';
+import { ROUTES } from '@/routes/api.routes';
 
 const router = Router();
 

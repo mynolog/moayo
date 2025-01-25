@@ -9,6 +9,12 @@ export const ALADIN_API_ENDPOINTS = {
   ITEM_LOOK_UP: '/ItemLookUp.aspx',
 } as const;
 
+// 에러 응답
+export interface AladinApiErrorResponse {
+  errorMessage: string;
+}
+
+// 공통 파라미터
 export interface AladinApiDefaultParams {
   ttbKey: string;
   searchTarget: 'book' | 'ebook';
@@ -20,25 +26,10 @@ export interface AladinApiDefaultParams {
 }
 // 도서 리스트 파라미터
 export interface AladinApiItemListParams {
-  queryType: 'Bestseller' | 'ItemNewAll' | 'ItemNewSpecial' | 'ItemEditorChoice' | 'BlogBest';
+  queryType: 'Bestseller' | 'ItemNewAll' | 'ItemNewSpecial' | 'BlogBest';
   start?: number;
   maxResults?: number;
 }
-// 도서 검색 파라미터
-export interface AladinApiItemSearchParams {
-  query: string;
-  queryType?: 'keyword' | 'title' | 'author' | 'publisher';
-  start?: number;
-  maxResult?: number;
-  sort?: 'accuracy' | 'publishTime' | 'title';
-}
-
-// 도서 상세 조회 파라미터
-export interface AladinApiItemLookUpParams {
-  itemId: string;
-  itemIdType?: 'isbn13' | 'isbn' | 'itemId';
-}
-
 // 도서 리스트 응답
 export interface AladinApiItemListResponse {
   title: string;
@@ -48,6 +39,21 @@ export interface AladinApiItemListResponse {
   item: Book[];
 }
 
-export interface AladinApiErrorResponse {
-  errorMessage: string;
+// 도서 검색 파라미터
+export interface AladinApiItemSearchParams {
+  query: string;
+  queryType?: 'keyword' | 'title' | 'author' | 'publisher';
+  start?: number;
+  maxResult?: number;
+  sort?: 'accuracy' | 'publishTime' | 'title';
 }
+// 도서 검색 응답
+export interface AladinApiItemSearchResponse {}
+
+// 도서 상세 조회 파라미터
+export interface AladinApiItemLookUpParams {
+  itemId: string;
+  itemIdType?: 'isbn13' | 'isbn' | 'itemId';
+}
+// 도서 상세 조회 응답
+export interface AladinApiItemLookUpResponse {}

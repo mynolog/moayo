@@ -3,7 +3,7 @@ export interface Book {
   author: string;
   pubDate: Date;
   description: string;
-  isbn: string;
+  isbn13: string;
   publisher: string;
   cover?: string;
   link?: string;
