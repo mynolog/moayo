@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { AladinApiItemListParams, AladinApiItemListResponse } from '@/types/aladinApi';
-import { AladinFetchError } from '@/errors/AladinApiFetchError';
+import { AladinItemListQueryParams, AladinItemListResponse } from '@/types/aladinApi';
+import { AladinFetchError } from '@/errors/AladinFetchError';
 import { getBooksService } from '@/services/book.services';
 
 export const getBooks = async (req: Request, res: Response) => {
-  const queryType = (req.query.queryType as AladinApiItemListParams['queryType']) || 'Bestseller';
-  const start = (req.query.start as AladinApiItemListParams['start']) || 1;
-  const maxResults = (req.query.maxResults as AladinApiItemListParams['maxResults']) || 10;
-  const params: AladinApiItemListParams = {
+  const queryType = (req.query.queryType as AladinItemListQueryParams['queryType']) || 'Bestseller';
+  const start = (req.query.start as AladinItemListQueryParams['start']) || 1;
+  const maxResults = (req.query.maxResults as AladinItemListQueryParams['maxResults']) || 10;
+  const params: AladinItemListQueryParams = {
     queryType,
     start,
     maxResults,
@@ -15,7 +15,7 @@ export const getBooks = async (req: Request, res: Response) => {
   try {
     const response = await getBooksService(params);
 
-    const result: AladinApiItemListResponse = {
+    const result: AladinItemListResponse = {
       title: response.title,
       totalResults: response.totalResults,
       startIndex: response.startIndex,
