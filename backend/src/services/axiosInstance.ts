@@ -1,5 +1,5 @@
 import '@/config/dotenv';
-import type { AladinApiDefaultParams } from '@/types/aladinApi';
+import type { AladinDefaultQueryParams } from '@/types/aladinApi';
 import axios from 'axios';
 import { ConfigurationError } from '@/errors/ConfigurationError';
 
@@ -23,7 +23,7 @@ const axiosInstance = axios.create({
     output: 'js',
     version: '20131101',
     cover: 'big',
-  } as AladinApiDefaultParams,
+  } as AladinDefaultQueryParams,
 });
 
 export default axiosInstance;

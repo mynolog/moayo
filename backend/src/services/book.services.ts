@@ -1,19 +1,21 @@
 import type { AxiosResponse } from 'axios';
 import type { Book } from '@/types/book';
 import type {
-  AladinApiItemListParams,
-  AladinApiItemListResponse,
-  AladinApiErrorResponse,
+  AladinItemListQueryParams,
+  AladinItemListResponse,
+  AladinErrorResponse,
 } from '@/types/aladinApi';
-import { AladinFetchError } from '@/errors/AladinApiFetchError';
+import { AladinFetchError } from '@/errors/AladinFetchError';
 import axiosInstance from '@/services/axiosInstance';
 import { ALADIN_API_ENDPOINTS } from '@/types/aladinApi';
 
-export const getBooksService = async (params: AladinApiItemListParams) => {
-  const response: AxiosResponse<AladinApiItemListResponse | AladinApiErrorResponse> =
-    await axiosInstance(ALADIN_API_ENDPOINTS.ITEM_LIST, {
-      params: params as AladinApiItemListParams,
-    });
+export const getBooksService = async (params: AladinItemListQueryParams) => {
+  const response: AxiosResponse<AladinItemListResponse | AladinErrorResponse> = await axiosInstance(
+    ALADIN_API_ENDPOINTS.ITEM_LIST,
+    {
+      params: params as AladinItemListQueryParams,
+    },
+  );
 
   const { data } = response;
 
@@ -32,7 +34,7 @@ export const getBooksService = async (params: AladinApiItemListParams) => {
     link: book.link || '',
   }));
 
-  const processedData: AladinApiItemListResponse = { ...data, item: processedBooks };
+  const processedData: AladinItemListResponse = { ...data, item: processedBooks };
 
   return processedData;
 };
