@@ -6,8 +6,8 @@ export const createReviewService = async (params: ReviewParams, body: ReviewBody
   const { isbn13 } = params;
   const { userId, title, content, rating } = body;
 
-  if (!isbn13 || !userId || !title || !rating) {
-    throw new ReviewError(400, '필수 값이 누락되었습니다.');
+  if (rating < 1 || rating > 10) {
+    throw new ReviewError(400, '평점은 1에서 10 사이여야 합니다.');
   }
 
   const newReview = new ReviewModel({
@@ -18,7 +18,7 @@ export const createReviewService = async (params: ReviewParams, body: ReviewBody
     rating,
   });
 
-  await newReview.save();
+  return await newReview.save();
 };
 
 export const getReviewsByIsbnService = async (params: ReviewParams) => {
