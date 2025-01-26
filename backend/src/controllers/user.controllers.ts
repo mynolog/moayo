@@ -1,19 +1,30 @@
-import type { SignUpUser, SignInUser } from '@/types/user';
+import type {
+  SignUpUserBody,
+  SignUpUserResponse,
+  SignInUserBody,
+  SignInUserResponse,
+} from '@/types/user';
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import UserModel from '@/models/user.model';
+import { signInUserService, signUpUserService } from '@/services/user.services';
+import { ConfigurationError } from '@/errors/ConfigurationError';
+import { AuthenticationError } from '@/errors/AuthenticationError';
 
 // 회원 가입 - Create
 export const signUpUser = async (
-  req: Request<{}, {}, SignUpUser>,
-  res: Response,
+  req: Request<{}, {}, SignUpUserBody>,
+  res: Response<SignUpUserResponse>,
 ): Promise<void> => {
-  const { nickName, email, password, confirmPassword, birthDate, gender } = req.body;
-  const existedEmail = await UserModel.findOne({ email });
+  const { accountId, password, confirmPassword, ...rest } = req.body;
+  const existedAccountId = await UserModel.findOne({ accountId });
   // DB에 이메일 존재 여부 확인
-  if (existedEmail) {
-    res.status(400).json({ message: '이미 등록된 이메일입니다.' });
+  if (existedAccountId) {
+    res.status(400).json({ message: '이미 등록된 계정 ID 입니다.' });
     return;
+  }
+  // 필수 값 포함 여부 확인
+  if (!accountId || !password || !confirmPassword) {
+    res.status(400).json({ message: '회원 가입에 필요한 필수 값이 누락되었습니다.' });
   }
   // 비밀번호와 비밀번호 재입력이 일치하는지 확인
   if (password !== confirmPassword) {
@@ -24,29 +35,10 @@ export const signUpUser = async (
   }
 
   try {
-    // 회원 가입
-    const hashedPassword = await new UserModel().hashPassword(password);
-    const newUser = new UserModel({
-      nickName,
-      email,
-      password: hashedPassword,
-      birthDate,
-      gender,
-    });
-    await newUser.save();
-    // JWT 생성
-    const accessToken = jwt.sign(
-      {
-        id: newUser._id,
-        email: newUser.email,
-      },
-      process.env.JWT_SECRET_KEY as string,
-      {
-        expiresIn: '2h',
-      },
-    );
+    const response = await signUpUserService({ accountId, password, ...rest });
+
     // 클라이언트 쿠키 설정
-    res.cookie('accessToken', accessToken, {
+    res.cookie('accessToken', response.accessToken, {
       httpOnly: true,
       secure: false,
       maxAge: 7200000,
@@ -55,51 +47,35 @@ export const signUpUser = async (
 
     res.status(201).json({ message: '회원가입이 정상적으로 완료되었습니다.' });
   } catch (error) {
-    console.error(`회원가입 처리 중 오류가 발생했습니다: ${error}`);
-    res.status(500).json({
-      message: '회원가입 처리 중 예기치 않은 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-    });
+    if (error instanceof AuthenticationError) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else if (error instanceof ConfigurationError) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else {
+      res.status(500).json({
+        message: '회원가입 처리 중 예기치 않은 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+      });
+    }
   }
 };
 
 // 로그인 - Read
 export const signInUser = async (
-  req: Request<{}, {}, SignInUser>,
-  res: Response,
+  req: Request<{}, {}, SignInUserBody>,
+  res: Response<SignInUserResponse>,
 ): Promise<void> => {
-  const { email, password } = req.body;
+  const { accountId, password } = req.body;
 
-  if (!email || !password) {
+  if (!accountId || !password) {
     res.status(400).json({ message: '이메일과 비밀번호는 필수입니다.' });
     return;
   }
 
   try {
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      res.status(404).json({ message: '등록된 계정이 아닙니다.' });
-      return;
-    }
-    const isPasswordValid = await user.verifyPassword(password);
+    const response = await signInUserService({ accountId, password });
 
-    if (!isPasswordValid) {
-      res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
-      return;
-    }
-
-    // JWT 생성
-    const accessToken = jwt.sign(
-      {
-        id: user._id,
-        email: user.email,
-      },
-      process.env.JWT_SECRET_KEY as string,
-      {
-        expiresIn: '2h',
-      },
-    );
     // 클라이언트 쿠키 설정
-    res.cookie('accessToken', accessToken, {
+    res.cookie('accessToken', response.accessToken, {
       httpOnly: true,
       secure: false,
       maxAge: 7200000,

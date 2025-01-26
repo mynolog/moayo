@@ -7,11 +7,11 @@ const baseURL = process.env.ALADIN_BASE_URL;
 const ttbKey = process.env.ALADIN_TTB_KEY;
 
 if (!baseURL) {
-  throw new ConfigurationError('ALADIN_BASE_URL 환경 변수가 설정되지 않았습니다.');
+  throw new ConfigurationError(500, 'ALADIN_BASE_URL 환경 변수가 설정되지 않았습니다.');
 }
 
 if (!ttbKey) {
-  throw new ConfigurationError('ALADIN_TTB_KEY 환경 변수가 설정되지 않았습니다.');
+  throw new ConfigurationError(500, 'ALADIN_TTB_KEY 환경 변수가 설정되지 않았습니다.');
 }
 
 const axiosInstance = axios.create({
