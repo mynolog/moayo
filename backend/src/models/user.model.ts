@@ -2,9 +2,9 @@ import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 interface UserDocument extends Document {
-  nickName: string;
-  email: string;
+  accountId: string;
   password: string;
+  email?: string;
   birthDate?: Date;
   gender?: 'male' | 'female' | 'other';
   hashPassword: (password: string) => Promise<string>;
@@ -13,9 +13,9 @@ interface UserDocument extends Document {
 
 const UserSchema = new Schema<UserDocument>(
   {
-    nickName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    accountId: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    email: { type: String, required: false },
     birthDate: { type: Date, required: false },
     gender: {
       type: String,
