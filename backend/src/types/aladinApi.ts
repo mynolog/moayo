@@ -31,7 +31,7 @@ export interface AladinItemListQueryParams {
   maxResults?: number;
 }
 // 도서 리스트 응답
-export interface AladinItemListResponse {
+export interface AladinItemListServiceResponse {
   title: string;
   totalResults: number;
   startIndex: number;

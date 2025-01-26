@@ -8,3 +8,15 @@ export interface Book {
   cover?: string;
   link?: string;
 }
+
+export interface GetBooksResponseData {
+  title: string;
+  totalResults: number;
+  startIndex: number;
+  itemsPerPage: number;
+  books: Book[];
+}
+export interface GetBooksResponse {
+  message: string;
+  data: GetBooksResponseData;
+}
