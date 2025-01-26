@@ -1,10 +1,11 @@
+import type { Request, Response } from 'express';
 import type {
   SignUpUserBody,
   SignUpUserResponse,
   SignInUserBody,
   SignInUserResponse,
 } from '@/types/user';
-import { Request, Response } from 'express';
+import type { ErrorResponse } from '@/types/error';
 import UserModel from '@/models/user.model';
 import { signInUserService, signUpUserService } from '@/services/user.services';
 import { ConfigurationError } from '@/errors/ConfigurationError';
@@ -13,7 +14,7 @@ import { AuthenticationError } from '@/errors/AuthenticationError';
 // 회원 가입 - Create
 export const signUpUser = async (
   req: Request<{}, {}, SignUpUserBody>,
-  res: Response<SignUpUserResponse>,
+  res: Response<SignUpUserResponse | ErrorResponse>,
 ): Promise<void> => {
   const { accountId, password, confirmPassword, ...rest } = req.body;
   const existedAccountId = await UserModel.findOne({ accountId });
@@ -53,7 +54,7 @@ export const signUpUser = async (
       res.status(error.statusCode).json({ message: error.message });
     } else {
       res.status(500).json({
-        message: '회원가입 처리 중 예기치 않은 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        message: '회원가입 처리 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
       });
     }
   }

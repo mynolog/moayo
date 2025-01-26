@@ -14,7 +14,7 @@ if (!ttbKey) {
   throw new ConfigurationError(500, 'ALADIN_TTB_KEY 환경 변수가 설정되지 않았습니다.');
 }
 
-const axiosInstance = axios.create({
+const aladinApi = axios.create({
   baseURL: baseURL as string,
   params: {
     ttbKey: ttbKey as string,
@@ -26,4 +26,4 @@ const axiosInstance = axios.create({
   } as AladinDefaultQueryParams,
 });
 
-export default axiosInstance;
+export default aladinApi;
