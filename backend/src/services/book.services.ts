@@ -1,11 +1,13 @@
 import type { AxiosResponse, AxiosRequestConfig } from 'axios';
-import type { Book } from '@/types/book';
+import type { Book, BookDetail } from '@/types/book';
 import type {
   AladinItemListQueryParams,
   AladinItemListServiceResponse,
   AladinErrorResponse,
   AladinItemSearchQueryParams,
-  AladinItemSearchResponse,
+  AladinItemSearchServiceResponse,
+  AladinItemLookUpQueryParams,
+  AladinItemLookUpServiceResponse,
 } from '@/types/aladinApi';
 import { ALADIN_API_ENDPOINTS } from '@/types/aladinApi';
 import aladinApi from '@/api/aladinApi';
@@ -82,7 +84,7 @@ export const getBooksByQueryService = async (params: AladinItemSearchQueryParams
     link: book.link || '',
   }));
 
-  const processedData: AladinItemSearchResponse = {
+  const processedData: AladinItemSearchServiceResponse = {
     title,
     totalResults,
     startIndex,
@@ -91,4 +93,40 @@ export const getBooksByQueryService = async (params: AladinItemSearchQueryParams
   };
 
   return processedData;
+};
+
+export const getBookByIsbnService = async (params: AladinItemLookUpQueryParams) => {
+  const config: AxiosRequestConfig<{
+    params: AladinItemLookUpQueryParams;
+  }> = {
+    params,
+  };
+
+  const response: AxiosResponse<AladinItemLookUpServiceResponse | AladinErrorResponse> =
+    await aladinApi(ALADIN_API_ENDPOINTS.ITEM_LOOK_UP, config);
+  const { data } = response;
+
+  if ('errorMessage' in data) {
+    throw new AladinSearchError(404, data.errorMessage);
+  }
+
+  const { item } = data;
+
+  const processedBookDetail: BookDetail[] = item.map((detail) => ({
+    title: detail.title,
+    author: detail.author,
+    pubDate: detail.pubDate,
+    description: detail.description,
+    isbn13: detail.isbn13,
+    publisher: detail.publisher,
+    cover: detail.cover,
+    link: detail.link,
+    subInfo: {
+      subTitle: detail.subInfo.subTitle,
+      originalTitle: detail.subInfo.originalTitle,
+      itemPage: detail.subInfo.itemPage,
+    },
+  }));
+
+  return processedBookDetail;
 };

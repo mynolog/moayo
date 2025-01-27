@@ -1,4 +1,4 @@
-import type { Book } from './book';
+import type { Book, BookDetail } from './book';
 
 export const ALADIN_API_ENDPOINTS = {
   // 도서 검색
@@ -24,7 +24,7 @@ export interface AladinDefaultQueryParams {
   cover?: 'big' | 'midBig' | 'mid' | 'small' | 'mini' | 'none';
   [key: string]: string | number | undefined;
 }
-// 도서 리스트 쿼리
+// 도서 리스트 쿼리 파라미터
 export interface AladinItemListQueryParams {
   queryType: 'Bestseller' | 'ItemNewAll' | 'ItemNewSpecial' | 'BlogBest';
   start?: number;
@@ -39,7 +39,7 @@ export interface AladinItemListServiceResponse {
   item: Book[];
 }
 
-// 도서 검색 파라미터
+// 도서 검색 쿼리 파라미터
 export interface AladinItemSearchQueryParams {
   query: string;
   queryType?: 'keyword' | 'title' | 'author' | 'publisher';
@@ -49,7 +49,7 @@ export interface AladinItemSearchQueryParams {
   [key: string]: string | number | undefined;
 }
 // 도서 검색 응답
-export interface AladinItemSearchResponse {
+export interface AladinItemSearchServiceResponse {
   title: string;
   totalResults: number;
   startIndex: number;
@@ -57,11 +57,17 @@ export interface AladinItemSearchResponse {
   item: Book[];
 }
 
-// 도서 상세 조회 파라미터
+// 도서 상세 조회 URL 파라미터
+export interface AladinItemLookUpParams {
+  isbn13: string;
+}
+// 도서 상세 조회 쿼리 파라미터
 export interface AladinItemLookUpQueryParams {
   itemId: string;
   itemIdType?: 'isbn13' | 'isbn' | 'itemId';
   [key: string]: string | number | undefined;
 }
 // 도서 상세 조회 응답
-export interface AladinItemLookUpResponse {}
+export interface AladinItemLookUpServiceResponse {
+  item: BookDetail[];
+}
