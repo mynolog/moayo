@@ -49,7 +49,13 @@ export interface AladinItemSearchQueryParams {
   [key: string]: string | number | undefined;
 }
 // 도서 검색 응답
-export interface AladinItemSearchResponse {}
+export interface AladinItemSearchResponse {
+  title: string;
+  totalResults: number;
+  startIndex: number;
+  itemsPerPage: number;
+  item: Book[];
+}
 
 // 도서 상세 조회 파라미터
 export interface AladinItemLookUpQueryParams {
