@@ -4,7 +4,8 @@ import { ROUTES } from './apiRoutes';
 
 const router = Router();
 
-router.post(ROUTES.ROOT, createReview);
-router.get(ROUTES.ISBN, getReviewsByIsbn);
+// /api/books/:isbn/reviews
+router.post(ROUTES.REVIEWS, createReview);
+router.get(ROUTES.REVIEWS, getReviewsByIsbn);
 
 export default router;

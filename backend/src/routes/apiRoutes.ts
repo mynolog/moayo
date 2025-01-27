@@ -6,6 +6,8 @@ export const ROUTES = {
   SIGN_UP: '/sign-up',
   SIGN_IN: '/sign-in',
 
-  REVIEWS: '/reviews',
-  ISBN: '/:isbn',
+  BOOKS: '/books',
+  SEARCH: '/search',
+  BOOK_DETAIL: '/:isbn13',
+  REVIEWS: '/:isbn13/reviews',
 } as const;
