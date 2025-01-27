@@ -7,5 +7,7 @@ export const ROUTES = {
   SIGN_IN: '/sign-in',
 
   BOOKS: '/books',
+  SEARCH: '/search',
+  BOOK_DETAIL: '/:isbn13',
   REVIEWS: '/:isbn13/reviews',
 } as const;
