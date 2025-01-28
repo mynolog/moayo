@@ -36,8 +36,8 @@ export const signUpUserService = async ({
 
   const accessToken = jwt.sign(
     {
-      id: newUser._id,
-      email: newUser.email,
+      _id: newUser._id,
+      accountId: newUser.accountId,
     },
     jwtSecretKey,
     {
@@ -66,7 +66,7 @@ export const signInUserService = async ({
 
   const accessToken = jwt.sign(
     {
-      id: user._id,
+      _id: user._id,
       accountId: user.accountId,
     },
     jwtSecretKey,

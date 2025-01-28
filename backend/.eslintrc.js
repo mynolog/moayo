@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    node: true,
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
@@ -24,8 +27,5 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-object-type': 'off',
     '@typescript-eslint/no-unused-expressions': 'off',
-  },
-  globals: {
-    module: 'readonly',
   },
 };

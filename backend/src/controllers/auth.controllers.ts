@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { AuthRequest } from '@/types/express';
 import type {
   SignUpUserBody,
   SignUpUserResponse,
@@ -7,7 +8,7 @@ import type {
 } from '@/types/user';
 import type { ErrorResponse } from '@/types/error';
 import UserModel from '@/models/user.model';
-import { signInUserService, signUpUserService } from '@/services/user.services';
+import { signInUserService, signUpUserService } from '@/services/auth.services';
 import { ConfigurationError } from '@/errors/ConfigurationError';
 import { AuthenticationError } from '@/errors/AuthenticationError';
 
@@ -87,5 +88,14 @@ export const signInUser = async (
   } catch (error) {
     console.error(`로그인 처리 중 오류가 발생했습니다: ${error}`);
     res.status(500).json({ message: '로그인 처리 중 서버 오류가 발생했습니다.' });
+  }
+};
+
+// 유저 검증 - Read
+export const checkUserAuth = async (req: AuthRequest, res: Response) => {
+  if (req.user) {
+    res.status(200).json({ message: '로그인 상태입니다.', user: req.user });
+  } else {
+    res.status(401).json({ message: '로그인되지 않았습니다. 다시 로그인 해주세요.' });
   }
 };
