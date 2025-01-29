@@ -3,7 +3,11 @@
     :type="type"
     :disabled="disabled"
     :title="title"
-    :class="`px-3 py-2 font-extrabold text-white bg-gray-800 rounded-lg ${className}`"
+    :class="`px-3 py-2 font-extrabold text-white bg-soft-blue-900 rounded-lg cursor-auto
+             opacity-85 hover:cursor-pointer hover:opacity-100 hover:scale-105
+             disabled:bg-gray-400 disabled:cursor-not-allowed
+             transition-all duration-200
+             ${className}`"
     @click="handleButtonClick"
   >
     {{ label }}

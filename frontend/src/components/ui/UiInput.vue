@@ -1,15 +1,18 @@
 <template>
-  <input
-    :value="modelValue"
-    :type="type"
-    :placeholder="placeholder"
-    :class="`py-2 px-3 rounded-xl border-2 border-gray-400 focus:border-gray-800 outline-none  ${className}`"
-    @input="handleInputChange"
-  />
+  <label class="flex flex-col space-y-1">
+    <span class="text-sm text-gray-500">{{ label }}</span>
+    <input
+      :value="modelValue"
+      :type="type"
+      :placeholder="placeholder"
+      :class="`py-2 px-3 rounded-sm border-2 border-white focus:border-gray-800 outline-none transition-all duration-200 ${className}`"
+      @input="handleInputChange"
+    />
+  </label>
 </template>
 
 <script setup lang="ts">
-const { modelValue, type, placeholder } = defineProps({
+const { modelValue, type, placeholder, label } = defineProps({
   modelValue: {
     type: String,
     default: '',
@@ -19,6 +22,10 @@ const { modelValue, type, placeholder } = defineProps({
     default: 'text',
   },
   placeholder: {
+    type: String,
+    default: '',
+  },
+  label: {
     type: String,
     default: '',
   },
