@@ -1,6 +1,6 @@
 <template>
   <ui-navigation />
-  <main class="max-w-[1200px] mx-auto">
+  <main class="pt-[100px] max-w-[1200px] mx-auto">
     <slot></slot>
   </main>
 </template>

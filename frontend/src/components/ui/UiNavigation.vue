@@ -1,16 +1,16 @@
 <template>
-  <nav class="w-full h-[45px] bg-soft-blue-900 text-white">
-    <div class="max-w-[1200px] mx-auto text-white grid grid-cols-2">
+  <nav class="fixed w-full h-[45px] bg-soft-blue-900 z-50">
+    <div class="max-w-[1200px] mx-auto grid grid-cols-2">
       <ul class="flex items-center justify-start gap-3">
         <li v-for="item in mainNavList" :key="item.id + item.name">
           <router-link
             :to="item.path"
             :class="{
               'bg-white text-black font-bold h-[45px] mt-1': $route.path === item.path,
-              'hover:bg-white hover:text-black hover:font-bold hover:mt-1 h-[45px]':
+              'text-white hover:bg-white hover:text-black hover:font-bold hover:mt-1 h-[45px]':
                 $route.path !== item.path,
             }"
-            class="flex items-center justify-center w-20 rounded-t-sm text-white"
+            class="flex items-center justify-center w-20 rounded-t-sm"
             v-if="item.path"
             >{{ item.name }}</router-link
           >
@@ -22,10 +22,10 @@
             :to="item.path"
             :class="{
               'bg-white text-black font-bold h-[45px] mt-1': $route.path === item.path,
-              'hover:bg-white hover:text-black hover:font-bold hover:mt-1 h-[45px]':
+              'text-white hover:bg-white hover:text-black hover:font-bold hover:mt-1 h-[45px]':
                 $route.path !== item.path,
             }"
-            class="flex items-center justify-center w-20 rounded-t-sm text-white"
+            class="flex items-center justify-center w-20 rounded-t-sm"
             v-if="item.path"
             >{{ item.name }}</router-link
           >

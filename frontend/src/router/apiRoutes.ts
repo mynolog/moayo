@@ -6,5 +6,7 @@ export const ROUTES = {
 
   DASHBOARD: '/dashboard',
 
-  BOOK_DETAIL: (isbn: string = ':isbn') => `/books/${isbn}`,
+  BOOKS: '/books',
+
+  BOOK_DETAIL: (isbn13: string = ':isbn13') => `/books/${isbn13}`,
 } as const;
