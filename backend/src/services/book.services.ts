@@ -14,13 +14,10 @@ import aladinApi from '@/api/aladinApi';
 import { AladinFetchError, AladinSearchError } from '@/errors/AladinApiError';
 
 export const getBooksService = async (params: AladinItemListQueryParams) => {
-  const config: AxiosRequestConfig<{
-    params: AladinItemListQueryParams;
-  }> = {
-    params,
-  };
   const response: AxiosResponse<AladinItemListServiceResponse | AladinErrorResponse> =
-    await aladinApi(ALADIN_API_ENDPOINTS.ITEM_LIST, config);
+    await aladinApi(ALADIN_API_ENDPOINTS.ITEM_LIST, {
+      params,
+    });
 
   const { data } = response;
 
