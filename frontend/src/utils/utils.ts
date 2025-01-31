@@ -5,3 +5,10 @@ export const debounce = (fn: () => void, delay: number) => {
     timer = setTimeout(fn, delay);
   };
 };
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};

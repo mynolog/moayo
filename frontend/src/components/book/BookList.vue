@@ -27,29 +27,28 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref } from 'vue';
+import { watch, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 import BookCard from './BookCard.vue';
 import { useBooks } from '@/composables/useBooks';
-import { useTabStore } from '@/stores/book.store';
+import type { BooksQueryParams } from '@/types/book.type';
 
-const tabStore = useTabStore();
+const route = useRoute();
 
 // queryParams 관리
-const queryParams = ref({
-  queryType: tabStore.selectedTab,
+const queryParams = reactive<BooksQueryParams>({
+  queryType: (route.query.queryType ?? 'Bestseller') as BooksQueryParams['queryType'],
   start: 1,
   maxResults: 20,
 });
-
 // useBooks 훅을 사용하여 데이터를 불러옴
-const { data, initialLoading, loadMoreLoading, error, loadBooks } = useBooks(queryParams.value);
+const { data, initialLoading, loadMoreLoading, error, loadBooks } = useBooks(queryParams);
 
-// 탭 변경 시, queryType을 변경하고 데이터 새로 불러오기
 watch(
-  () => tabStore.selectedTab,
-  (newTab) => {
-    queryParams.value.queryType = newTab;
-    loadBooks(true); // 초기화 후 새로 불러오기
+  () => route.query.queryType,
+  (newQueryType) => {
+    queryParams.queryType = (newQueryType ?? 'Bestseller') as BooksQueryParams['queryType'];
+    loadBooks(true);
   },
 );
 </script>
