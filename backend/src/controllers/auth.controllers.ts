@@ -1,20 +1,20 @@
 import type { Request, Response } from 'express';
+import { AuthRequest } from '@/types/express';
 import type {
   SignUpUserBody,
   SignUpUserResponse,
   SignInUserBody,
   SignInUserResponse,
 } from '@/types/user';
-import type { ErrorResponse } from '@/types/error';
 import UserModel from '@/models/user.model';
-import { signInUserService, signUpUserService } from '@/services/user.services';
+import { signInUserService, signUpUserService } from '@/services/auth.services';
 import { ConfigurationError } from '@/errors/ConfigurationError';
 import { AuthenticationError } from '@/errors/AuthenticationError';
 
 // 회원 가입 - Create
 export const signUpUser = async (
   req: Request<{}, {}, SignUpUserBody>,
-  res: Response<SignUpUserResponse | ErrorResponse>,
+  res: Response<SignUpUserResponse>,
 ): Promise<void> => {
   const { accountId, password, confirmPassword, ...rest } = req.body;
   const existedAccountId = await UserModel.findOne({ accountId });
@@ -36,17 +36,17 @@ export const signUpUser = async (
   }
 
   try {
-    const response = await signUpUserService({ accountId, password, ...rest });
+    const { accessToken, user } = await signUpUserService({ accountId, password, ...rest });
 
     // 클라이언트 쿠키 설정
-    res.cookie('accessToken', response.accessToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: false,
       maxAge: 7200000,
       sameSite: 'lax',
     });
 
-    res.status(201).json({ message: '회원가입이 정상적으로 완료되었습니다.' });
+    res.status(201).json({ message: '회원가입이 정상적으로 완료되었습니다.', user });
   } catch (error) {
     if (error instanceof AuthenticationError) {
       res.status(error.statusCode).json({ message: error.message });
@@ -68,24 +68,33 @@ export const signInUser = async (
   const { accountId, password } = req.body;
 
   if (!accountId || !password) {
-    res.status(400).json({ message: '이메일과 비밀번호는 필수입니다.' });
+    res.status(400).json({ message: '계정 ID와 비밀번호는 필수입니다.' });
     return;
   }
 
   try {
-    const response = await signInUserService({ accountId, password });
+    const { accessToken, user } = await signInUserService({ accountId, password });
 
     // 클라이언트 쿠키 설정
-    res.cookie('accessToken', response.accessToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: false,
       maxAge: 7200000,
       sameSite: 'lax',
     });
 
-    res.status(200).json({ message: '로그인 성공했습니다.' });
+    res.status(200).json({ message: '로그인 성공했습니다.', user });
   } catch (error) {
     console.error(`로그인 처리 중 오류가 발생했습니다: ${error}`);
     res.status(500).json({ message: '로그인 처리 중 서버 오류가 발생했습니다.' });
+  }
+};
+
+// 유저 검증 - Read
+export const checkUserAuth = async (req: AuthRequest, res: Response) => {
+  if (req.user) {
+    res.status(200).json({ message: '로그인 상태입니다.' });
+  } else {
+    res.status(401).json({ message: '로그인되지 않았습니다. 다시 로그인 해주세요.' });
   }
 };

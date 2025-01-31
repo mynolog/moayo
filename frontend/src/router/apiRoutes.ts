@@ -4,5 +4,9 @@ export const ROUTES = {
   SIGN_UP: '/sign-up',
   SIGN_IN: '/sign-in',
 
-  BOOK_DETAIL: (isbn: string = ':isbn') => `/books/${isbn}`,
+  DASHBOARD: '/dashboard',
+
+  BOOKS: '/books',
+  BOOK_SEARCH: '/books/search',
+  BOOK_DETAIL: (isbn13: string = ':isbn13') => `/books/${isbn13}`,
 } as const;

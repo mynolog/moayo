@@ -26,12 +26,14 @@ export const getBooks = async (
   req: Request<{}, {}, {}, AladinItemListQueryParams>,
   res: Response<GetBooksResponse | ErrorResponse>,
 ) => {
-  const { queryType = 'Bestseller', start = 1, maxResults = 10 } = req.query;
+  const { queryType = 'Bestseller', start = '1', maxResults = '10' } = req.query;
+
   const params: AladinItemListQueryParams = {
     queryType,
-    start,
-    maxResults,
+    start: parseInt(start as string, 10),
+    maxResults: parseInt(maxResults as string, 10),
   };
+
   try {
     const { title, totalResults, startIndex, itemsPerPage, item } = await getBooksService(params);
 
