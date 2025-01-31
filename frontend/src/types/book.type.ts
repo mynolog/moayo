@@ -41,7 +41,7 @@ export interface BookSearchQueryParams {
   query: string;
   queryType?: 'keyword' | 'title' | 'author' | 'publisher';
   start?: number;
-  maxResult?: number;
+  maxResults?: number;
   sort?: 'accuracy' | 'publishTime' | 'title';
 }
 

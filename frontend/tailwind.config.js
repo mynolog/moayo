@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        'form-background': '#F5F6F8',
+        background: 'var(--background-color)',
         'soft-blue': {
           200: '#b2d3e2',
           400: '#8bb8d8',
