@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import UiInput from '../ui/UiInput.vue';
+import UiInput from '@/components/ui/UiInput.vue';
 import { useBookSearch } from '@/composables/useBookSearch';
 
 const { queryParams, searchData, isLoading, error, isDropdownVisible, hideDropdown } =

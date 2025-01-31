@@ -11,6 +11,7 @@
     @click="handleButtonClick"
   >
     {{ label }}
+    <slot></slot>
   </button>
 </template>
 
@@ -30,7 +31,7 @@ const { type, disabled, title, label, className } = defineProps({
   },
   label: {
     type: String,
-    required: true,
+    default: '',
   },
   className: {
     type: String,
