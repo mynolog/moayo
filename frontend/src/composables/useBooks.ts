@@ -1,10 +1,10 @@
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import type { AxiosResponse } from 'axios';
+import type { BooksQueryParams, BooksResponse, BooksResponseData } from '@/types/book.type';
+import { ref, reactive, onMounted, onUnmounted, watch } from 'vue';
 import api from '@/api/api';
 import { ROUTES } from '@/router/apiRoutes';
-import type { BooksQueryParams, BooksResponse, BooksResponseData } from '@/types/book.type';
-import type { AxiosResponse } from 'axios';
 
-export const useBooks = (query?: BooksQueryParams) => {
+export const useBooks = (queryParams: BooksQueryParams) => {
   const data = reactive<BooksResponseData>({
     title: '',
     itemsPerPage: 0,
@@ -13,21 +13,16 @@ export const useBooks = (query?: BooksQueryParams) => {
     books: [],
   });
 
-  // queryParams: 기본값 설정 및 query 병합
-  const queryParams = reactive<BooksQueryParams>({
-    queryType: query?.queryType || 'Bestseller',
-    start: query?.start || 1,
-    maxResults: query?.maxResults || 20,
-  });
-
-  const isLoading = ref(false);
+  const initialLoading = ref(false);
+  const loadMoreLoading = ref(false);
   const error = ref<unknown | null>(null);
 
   // 데이터 로드 함수
   const loadBooks = async (reset: boolean) => {
-    if (isLoading.value) return; // 이미 로딩 중이라면 중복 호출 방지
+    if (initialLoading.value || loadMoreLoading.value) return;
 
-    isLoading.value = true;
+    if (reset) initialLoading.value = true;
+    else loadMoreLoading.value = true;
 
     try {
       if (reset) data.books = []; // 초기 요청 시 기존 데이터 초기화
@@ -48,9 +43,18 @@ export const useBooks = (query?: BooksQueryParams) => {
     } catch (err) {
       error.value = err;
     } finally {
-      isLoading.value = false;
+      if (reset) initialLoading.value = false;
+      else loadMoreLoading.value = false;
     }
   };
+
+  // queryParams.queryType이 변경되면 데이터를 새로 불러오기
+  watch(
+    () => queryParams.queryType, // queryParams.queryType 변경 감지
+    () => {
+      loadBooks(true); // queryType 변경 시 기존 데이터 초기화하고 새로 불러오기
+    },
+  );
 
   // 스크롤 처리 함수 (무한 스크롤)
   const handleScroll = () => {
@@ -63,7 +67,7 @@ export const useBooks = (query?: BooksQueryParams) => {
       // 현재 스크롤 된 위치 기준으로 하단까지 남은 거리 - 남은 스크롤 영역 = 100px 보다 작을 때
       scrollHeight - scrollTop - windowHeight <= threshold &&
       // 데이터를 로딩 중이 아닐 때
-      !isLoading.value &&
+      !loadMoreLoading.value &&
       // 총 결과 수가 로드된 수보다 많을 경우
       data.books.length < data.totalResults
     ) {
@@ -81,5 +85,5 @@ export const useBooks = (query?: BooksQueryParams) => {
     window.removeEventListener('scroll', handleScroll);
   });
 
-  return { data, isLoading, error };
+  return { data, initialLoading, loadMoreLoading, error, loadBooks };
 };
