@@ -4,15 +4,15 @@ import ReviewModel from '@/models/review.model';
 
 export const createReviewService = async (params: ReviewParams, body: ReviewBody) => {
   const { isbn13 } = params;
-  const { userId, title, content, rating } = body;
+  const { accountId, title, content, rating } = body;
 
-  if (rating < 1 || rating > 10) {
-    throw new ReviewError(400, '평점은 1에서 10 사이여야 합니다.');
+  if (rating < 1 || rating > 5) {
+    throw new ReviewError(400, '평점은 1점에서 5점 사이여야 합니다.');
   }
 
   const newReview = new ReviewModel({
     isbn13,
-    userId,
+    accountId,
     title,
     content,
     rating,
@@ -26,8 +26,9 @@ export const getReviewsByIsbnService = async (params: ReviewParams) => {
 
   const reviews = await ReviewModel.find({ isbn13 });
 
+  // 해당 도서의 리뷰가 없을 경우에는 빈배열로 반환
   if (reviews.length === 0 || !reviews) {
-    throw new ReviewError(404, '해당 도서의 리뷰를 찾을 수 없습니다.');
+    return [];
   }
 
   return reviews;

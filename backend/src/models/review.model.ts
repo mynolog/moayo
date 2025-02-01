@@ -2,7 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface ReviewDocument extends Document {
   isbn13: string;
-  userId: string;
+  accountId: string;
   title: string;
   rating: number;
   content?: string;
@@ -11,9 +11,9 @@ export interface ReviewDocument extends Document {
 const ReviewSchema = new Schema<ReviewDocument>(
   {
     isbn13: { type: String, required: true },
-    userId: { type: String, required: true },
+    accountId: { type: String, required: true },
     title: { type: String, required: true },
-    rating: { type: Number, min: 1, max: 10, required: true },
+    rating: { type: Number, min: 1, max: 5, required: true },
     content: { type: String, required: false },
   },
   { timestamps: true },

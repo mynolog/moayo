@@ -1,6 +1,6 @@
 export interface Review {
   isbn13: string;
-  userId: string;
+  accountId: string;
   title: string;
   rating: number;
   content?: string;
