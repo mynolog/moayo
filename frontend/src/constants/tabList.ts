@@ -1,9 +1,9 @@
-import type { TabState } from '@/stores/book.store';
+import type { BooksQueryParams } from '@/types/book.type';
 
 interface TabList {
   id: number;
   name: string;
-  queryType: TabState['activeTab'];
+  queryType: BooksQueryParams['queryType'];
 }
 
 export const tabList: TabList[] = [
