@@ -1,7 +1,7 @@
 export interface Book {
   title: string;
   author: string;
-  pubDate: Date;
+  pubDate: string;
   description: string;
   isbn13: string;
   publisher: string;
@@ -49,4 +49,11 @@ export interface BookSearchQueryParams {
 export interface BookDetailQueryParams {
   itemId: string;
   itemIdType?: 'isbn13' | 'isbn' | 'itemId';
+}
+export interface BookDetailResponse {
+  message: string;
+  data: BookDetailResponseData;
+}
+export interface BookDetailResponseData {
+  bookDetail: BookDetail;
 }

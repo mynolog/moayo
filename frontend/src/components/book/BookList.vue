@@ -3,7 +3,6 @@
     v-if="data && data.books"
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center"
   >
-    <!-- 초기 로딩 시 스켈레톤 UI -->
     <li
       v-if="initialLoading"
       v-for="index in 12"
@@ -11,10 +10,8 @@
       class="w-[17rem] h-[295px] p-3 z-1 border-4 border-transparent rounded-lg bg-gray-200 animate-pulse"
     ></li>
 
-    <!-- 실제 데이터 -->
     <book-card v-for="book in data.books" :key="book.isbn13" :book="book" />
 
-    <!-- 추가 로딩 중일 때 스켈레톤 UI -->
     <li
       v-if="loadMoreLoading"
       v-for="index in 4"
