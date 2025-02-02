@@ -9,9 +9,9 @@ export const createReview = async (
   res: Response,
 ): Promise<void> => {
   const { isbn13 } = req.params;
-  const { accountId, title, rating } = req.body;
+  const { accountId, rating } = req.body;
 
-  if (!isbn13 || !accountId || !title || !rating) {
+  if (!isbn13 || !accountId || !rating) {
     res.status(400).json({ message: '필수 값이 누락되었습니다.' });
     return;
   }
