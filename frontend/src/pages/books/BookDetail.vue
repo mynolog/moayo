@@ -61,18 +61,38 @@
         <h4 class="text-xl font-bold">짧은 리뷰</h4>
 
         <div class="flex flex-col gap-4">
-          <form class="flex flex-col gap-4">
-            <review-rating-picker />
-            <review-textarea />
+          <form class="flex flex-col gap-4" @submit.prevent="handleSubmitReviewForm">
+            <div class="flex gap-1 items-center">
+              <span
+                v-for="n in 5"
+                :key="`${n} - ratingPicker`"
+                @mouseover="hoverRating = n"
+                @mouseleave="hoverRating = 0"
+                @click="selectedRating = n"
+                class="hover:cursor-pointer text-lg"
+              >
+                <font-awesome-icon
+                  :icon="n <= (hoverRating || selectedRating) ? faStarSolid : faStarRegular"
+                  class="text-soft-blue-600"
+                />
+              </span>
+              <span class="mx-2 font-semibold">{{ selectedRating }}점</span>
+            </div>
+            <div class="w-full h-20 grid grid-cols-[9fr_1fr] gap-2">
+              <textarea
+                v-model="form.content"
+                placeholder="리뷰를 남겨주세요. 부적절한 내용은 삭제될 수 있습니다."
+                class="resize-none p-2 outline-none border-2 border-white focus:border-gray-800"
+              ></textarea>
+              <ui-button type="submit" label="등록" className="font-bold" />
+            </div>
           </form>
+
           <div class="border-b border-gray-200 py-3"></div>
 
-          <div v-if="reviewsData && reviewsData.reviews" class="w-full">
+          <div v-if="reviewsData" class="w-full">
             <ul>
-              <li
-                v-for="review in reviewsData.reviews"
-                class="w-full h-20 grid grid-cols-[3fr_7fr]"
-              >
+              <li v-for="review in reviewsData" class="w-full h-20 grid grid-cols-[3fr_7fr]">
                 <review-rating-viewer :reviewRating="review.rating" />
                 <review-content-viewer
                   v-show="review.content"
@@ -91,23 +111,48 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { useBookDetail } from '@/composables/useBookDetail';
 import { useBookReviews } from '@/composables/useBookReviews';
-import ReviewRatingPicker from '@/components/review/ReviewRatingPicker.vue';
-import ReviewTextarea from '@/components/review/ReviewTextarea.vue';
+import { useCreateBookReview } from '@/composables/useCreateBookReview';
 import ReviewRatingViewer from '@/components/review/ReviewRatingViewer.vue';
 import ReviewContentViewer from '@/components/review/ReviewContentViewer.vue';
+import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
+import { faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons';
+import UiButton from '@/components/ui/UiButton.vue';
 
 const route = useRoute();
 const isbn13 = route.params.isbn13 as string;
 
-const { data, isLoading, error } = useBookDetail(isbn13);
+const form = reactive({
+  accountId: 'myno',
+  rating: 0,
+  content: '',
+});
 
+const selectedRating = ref(0);
+const hoverRating = ref(0);
+
+const { data, isLoading, error } = useBookDetail(isbn13);
 const { reviewsData, isReviewsLoading, reviewsError } = useBookReviews(isbn13);
+const { mutation, isSubmitting, error: submitError } = useCreateBookReview(isbn13);
 
 const formatTitle = (title: string) => {
   return title.split(' - ')[0];
 };
+
+const handleSubmitReviewForm = async () => {
+  console.log('asdas');
+  try {
+    await mutation.mutateAsync({ isbn13, form }); // mutation을 사용하여 리뷰 제출
+    form.content = '';
+    selectedRating.value = 0;
+  } catch (error) {
+    console.error('리뷰 제출 실패:', error);
+  }
+};
+
+watch(selectedRating, (newRating) => (form.rating = newRating));
 </script>

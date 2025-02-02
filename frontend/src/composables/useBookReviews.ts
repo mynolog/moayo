@@ -1,38 +1,18 @@
-import type { AxiosResponse } from 'axios';
-import type { BookReviewsResponse, BookReviewsResponseData } from '@/types/review.type';
-import { reactive, ref, onMounted } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
 import api from '@/api/api';
+import type { BookReviewsResponse } from '@/types/review.type';
 import { ROUTES } from '@/router/apiRoutes';
 
 export const useBookReviews = (isbn13: string) => {
-  const data = reactive<BookReviewsResponseData>({
-    reviews: [],
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['bookReviews', isbn13],
+    queryFn: async () => {
+      const { data: responseData } = await api.get<BookReviewsResponse>(ROUTES.BOOK_REVIEW(isbn13));
+      return responseData.data.reviews;
+    },
+    staleTime: 300000,
+    refetchOnWindowFocus: false,
   });
 
-  const isLoading = ref(false);
-  const error = ref<unknown | null>(null);
-
-  const loadBookReviews = async () => {
-    isLoading.value = true;
-
-    try {
-      const { data: responseData }: AxiosResponse<BookReviewsResponse> = await api.get(
-        ROUTES.BOOK_REVIEW(isbn13),
-      );
-      if (responseData.data.reviews.length > 0) {
-        data.reviews.push(...responseData.data.reviews);
-      }
-    } catch (err) {
-      console.error(err);
-      error.value = err;
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
-  onMounted(() => {
-    loadBookReviews();
-  });
-
-  return { reviewsData: data, isReviewsLoading: isLoading, reviewsError: error };
+  return { reviewsData: data, isReviewsLoading: isLoading, reviewsError: error, refetch };
 };
