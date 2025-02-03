@@ -6,6 +6,11 @@ export interface User {
   gender?: 'male' | 'female' | 'other';
 }
 
+export interface AuthUser {
+  accountId: string;
+  _id: string;
+}
+
 // 회원가입 유저 타입
 export interface SignUpUserBody extends User {
   confirmPassword: string;
@@ -13,20 +18,20 @@ export interface SignUpUserBody extends User {
 export interface SignUpUserServiceBody extends User {}
 export interface SignUpUserResponse {
   message: string;
-  user?: Pick<User, 'accountId'>;
+  user: AuthUser;
 }
 export interface SignUpUserServiceResponse {
   accessToken: string;
-  user: Pick<User, 'accountId'>;
+  user: AuthUser;
 }
 // 로그인 유저 타입
 export interface SignInUserBody extends Pick<User, 'accountId' | 'password'> {}
 export interface SignInUserServiceBody extends Pick<User, 'accountId' | 'password'> {}
 export interface SignInUserResponse {
   message: string;
-  user?: Pick<User, 'accountId'>;
+  user: AuthUser;
 }
 export interface SignInUserServiceResponse {
   accessToken: string;
-  user: Pick<User, 'accountId'>;
+  user: AuthUser;
 }
