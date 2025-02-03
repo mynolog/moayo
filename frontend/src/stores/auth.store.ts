@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 
-interface User {
+interface AuthUser {
   accountId: string;
+  _id: string;
 }
 
 interface AuthState {
   isAuth: boolean;
-  user: User | null;
+  user: AuthUser | null;
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -15,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
     user: null,
   }),
   actions: {
-    async signIn(user: User) {
+    async signIn(user: AuthUser) {
       try {
         this.isAuth = true;
         this.user = user;
