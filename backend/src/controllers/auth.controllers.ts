@@ -50,7 +50,7 @@ export const signUpUser = async (
       httpOnly: true,
       secure: false,
       maxAge: 7200000,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     res.status(201).json({ message: '회원가입이 정상적으로 완료되었습니다.', user });
@@ -92,7 +92,7 @@ export const signInUser = async (
       httpOnly: true,
       secure: false,
       maxAge: 7200000,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     res.status(200).json({ message: '로그인 성공했습니다.', user });

@@ -1,23 +1,37 @@
-import type { ReviewBody, ReviewParams } from '@/types/review';
-import { Request, Response } from 'express';
+import type { CreateReviewBody, ReviewBody, ReviewParams } from '@/types/review';
+import type { Request, Response } from 'express';
+import type { AuthRequest } from '@/types/express';
 import { ReviewError } from '@/errors/ReviewError';
 import { createReviewService, getReviewsByIsbnService } from '@/services/review.services';
-
 // 리뷰 생성 - Create
 export const createReview = async (
-  req: Request<ReviewParams, {}, ReviewBody>,
+  req: AuthRequest<ReviewParams, {}, ReviewBody>,
   res: Response,
 ): Promise<void> => {
-  const { isbn13 } = req.params;
-  const { accountId, rating } = req.body;
+  if (!req.user) {
+    res.status(403).json({ message: '인증되지 않은 사용자입니다.' });
+    return;
+  }
 
-  if (!isbn13 || !accountId || !rating) {
+  const { isbn13 } = req.params;
+  const { rating, content } = req.body;
+  const { _id, accountId } = req.user;
+
+  const newReviewBody: CreateReviewBody = {
+    rating,
+    content,
+    user_id: _id,
+    accountId,
+    isbn13,
+  };
+
+  if (!isbn13 || !rating || !content) {
     res.status(400).json({ message: '필수 값이 누락되었습니다.' });
     return;
   }
 
   try {
-    const response = await createReviewService(req.params, req.body);
+    const response = await createReviewService(req.params, newReviewBody);
 
     res.status(201).json({ message: '리뷰가 정상적으로 등록되었습니다.', newReview: response });
   } catch (error) {
