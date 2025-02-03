@@ -13,6 +13,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@tanstack/vue-query": "^5.66.0",
     "@vue/compiler-sfc": "^3.5.13",
     "axios": "^1.7.9",
     "pinia": "^2.3.1",
