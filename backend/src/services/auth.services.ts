@@ -52,6 +52,7 @@ export const signUpUserService = async ({
   return {
     accessToken,
     user: {
+      _id: newUser._id,
       accountId: newUser.accountId,
     },
   };
@@ -85,6 +86,7 @@ export const signInUserService = async ({
   return {
     accessToken,
     user: {
+      _id: user._id,
       accountId: user.accountId,
     },
   };

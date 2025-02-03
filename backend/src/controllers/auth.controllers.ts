@@ -6,6 +6,7 @@ import type {
   SignInUserBody,
   SignInUserResponse,
 } from '@/types/user';
+import type { ErrorResponse } from '@/types/error';
 import UserModel from '@/models/user.model';
 import { signInUserService, signUpUserService } from '@/services/auth.services';
 import { ConfigurationError } from '@/errors/ConfigurationError';
@@ -14,7 +15,7 @@ import { AuthenticationError } from '@/errors/AuthenticationError';
 // 회원 가입 - Create
 export const signUpUser = async (
   req: Request<{}, {}, SignUpUserBody>,
-  res: Response<SignUpUserResponse>,
+  res: Response<SignUpUserResponse | ErrorResponse>,
 ): Promise<void> => {
   const { accountId, password, confirmPassword, ...rest } = req.body;
   const existedAccountId = await UserModel.findOne({ accountId });
@@ -26,6 +27,7 @@ export const signUpUser = async (
   // 필수 값 포함 여부 확인
   if (!accountId || !password || !confirmPassword) {
     res.status(400).json({ message: '회원 가입에 필요한 필수 값이 누락되었습니다.' });
+    return;
   }
   // 비밀번호와 비밀번호 재입력이 일치하는지 확인
   if (password !== confirmPassword) {
@@ -37,6 +39,11 @@ export const signUpUser = async (
 
   try {
     const { accessToken, user } = await signUpUserService({ accountId, password, ...rest });
+
+    if (!user) {
+      res.status(400).json({ message: '유저 정보가 누락되었습니다.' });
+      return;
+    }
 
     // 클라이언트 쿠키 설정
     res.cookie('accessToken', accessToken, {
@@ -54,7 +61,7 @@ export const signUpUser = async (
       res.status(error.statusCode).json({ message: error.message });
     } else {
       res.status(500).json({
-        message: '회원가입 처리 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        message: '회원가입 처리 중 서버 오류가 발생했습니다.',
       });
     }
   }
@@ -63,7 +70,7 @@ export const signUpUser = async (
 // 로그인 - Read
 export const signInUser = async (
   req: Request<{}, {}, SignInUserBody>,
-  res: Response<SignInUserResponse>,
+  res: Response<SignInUserResponse | ErrorResponse>,
 ): Promise<void> => {
   const { accountId, password } = req.body;
 
@@ -74,6 +81,11 @@ export const signInUser = async (
 
   try {
     const { accessToken, user } = await signInUserService({ accountId, password });
+
+    if (!user) {
+      res.status(400).json({ message: '유저 정보가 누락되었습니다.' });
+      return;
+    }
 
     // 클라이언트 쿠키 설정
     res.cookie('accessToken', accessToken, {
