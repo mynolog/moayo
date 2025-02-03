@@ -5,7 +5,6 @@ import { ROUTES } from '@/router/apiRoutes';
 import { useBookReviews } from './useBookReviews';
 
 interface ReviewForm {
-  accountId: string;
   content: string;
   rating: number;
 }

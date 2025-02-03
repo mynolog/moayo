@@ -127,7 +127,6 @@ const route = useRoute();
 const isbn13 = route.params.isbn13 as string;
 
 const form = reactive({
-  accountId: 'myno',
   rating: 0,
   content: '',
 });
@@ -144,7 +143,6 @@ const formatTitle = (title: string) => {
 };
 
 const handleSubmitReviewForm = async () => {
-  console.log('asdas');
   try {
     await mutation.mutateAsync({ isbn13, form }); // mutation을 사용하여 리뷰 제출
     form.content = '';
