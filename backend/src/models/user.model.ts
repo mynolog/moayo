@@ -1,10 +1,10 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
   accountId: string;
   password: string;
-  _id: string;
+  _id: Types.ObjectId;
   email?: string;
   birthDate?: Date;
   gender?: 'male' | 'female' | 'other';
@@ -16,7 +16,6 @@ const UserSchema = new Schema<UserDocument>(
   {
     accountId: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    _id: { type: String, required: true },
     email: { type: String, required: false },
     birthDate: { type: Date, required: false },
     gender: {

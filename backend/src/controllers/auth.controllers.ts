@@ -48,7 +48,7 @@ export const signUpUser = async (
     // 클라이언트 쿠키 설정
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       maxAge: 7200000,
       sameSite: 'none',
     });
@@ -60,6 +60,7 @@ export const signUpUser = async (
     } else if (error instanceof ConfigurationError) {
       res.status(error.statusCode).json({ message: error.message });
     } else {
+      console.error(error);
       res.status(500).json({
         message: '회원가입 처리 중 서버 오류가 발생했습니다.',
       });
@@ -90,7 +91,7 @@ export const signInUser = async (
     // 클라이언트 쿠키 설정
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       maxAge: 7200000,
       sameSite: 'none',
     });

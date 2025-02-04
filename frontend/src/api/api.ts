@@ -17,11 +17,13 @@ api.interceptors.request.use(
 
         if (checkResponse.status !== 200) {
           window.location.replace('/sign-in'); // 리디렉션 수행
+          localStorage.removeItem('auth');
           return Promise.reject('인증되지 않은 사용자입니다. 다시 로그인해주세요.');
         }
         return config;
       } catch (error) {
         window.location.replace('/sign-in');
+        localStorage.removeItem('auth');
         return Promise.reject('인증되지 않은 사용자입니다. 다시 로그인해주세요.');
       } finally {
         isRedirecting = false; // 리디렉션 후 상태 리셋

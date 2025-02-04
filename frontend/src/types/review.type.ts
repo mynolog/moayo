@@ -1,5 +1,6 @@
 export interface BookReview {
   _id: string;
+  user_id: string;
   isbn13: string;
   accountId: string;
   title: string;

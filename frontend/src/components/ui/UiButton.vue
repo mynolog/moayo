@@ -3,8 +3,8 @@
     :type="type"
     :disabled="disabled"
     :title="title"
-    :class="`px-3 py-2 text-white bg-soft-blue-900 rounded-lg cursor-auto scale-95
-             opacity-95 hover:cursor-pointer hover:opacity-100 hover:scale-100 hover:font-bold
+    :class="`px-3 py-2 text-white bg-soft-blue-800 rounded-lg cursor-auto
+             hover:cursor-pointer hover:font-bold hover:bg-soft-blue-900
              disabled:bg-gray-400 disabled:cursor-not-allowed
              transition-all duration-200
              ${className}`"

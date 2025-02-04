@@ -1,4 +1,5 @@
 export interface Review {
+  _id?: string;
   isbn13: string;
   accountId: string;
   user_id: string;
@@ -12,3 +13,13 @@ export interface ReviewParams {
 }
 
 export interface CreateReviewBody extends Review {}
+
+export interface UpdateReviewBody {
+  _id: string;
+  content?: string;
+  rating?: number;
+}
+
+export interface DeleteReviewBody {
+  _id: string;
+}
