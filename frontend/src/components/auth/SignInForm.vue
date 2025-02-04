@@ -6,12 +6,10 @@
     <div class="mx-auto w-2/5 flex flex-col justify-center gap-3">
       <ui-input label="아이디" v-model="form.accountId" />
       <ui-input label="비밀번호" v-model="form.password" type="password" />
-      <ui-button
-        type="submit"
-        :label="isLoading ? '로그인 중...' : '로그인'"
-        :disabled="isLoading"
-        className="mt-5"
-      />
+      <ui-button type="submit" :disabled="isLoading" className="mt-5">
+        <span v-if="!isLoading">로그인</span>
+        <ui-loading-spiner v-else />
+      </ui-button>
     </div>
   </form>
 </template>
@@ -22,6 +20,7 @@ import { useRouter } from 'vue-router';
 import api from '@/api/api';
 import UiInput from '@/components/ui/UiInput.vue';
 import UiButton from '@/components/ui/UiButton.vue';
+import UiLoadingSpiner from '../ui/UiLoadingSpiner.vue';
 import { useAuthStore } from '@/stores/auth.store';
 
 const authState = useAuthStore();
