@@ -8,8 +8,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   const token = req.cookies.accessToken;
 
   if (req.url.includes(ROUTES.SIGN_IN) || req.url.includes(ROUTES.SIGN_UP)) {
-    next();
-    return;
+    return next();
   }
 
   if (!token) {

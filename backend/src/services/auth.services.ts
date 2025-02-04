@@ -5,7 +5,7 @@ import type {
   SignUpUserServiceResponse,
 } from '@/types/user';
 import jwt from 'jsonwebtoken';
-import UserModel from '@/models/user.model';
+import UserModel, { UserDocument } from '@/models/user.model';
 import { ConfigurationError } from '@/errors/ConfigurationError';
 import { AuthenticationError } from '@/errors/AuthenticationError';
 
@@ -30,7 +30,7 @@ export const signUpUserService = async ({
     password: hashedPassword,
     birthDate,
     gender,
-  });
+  }) as UserDocument;
 
   await newUser.save();
 
@@ -52,7 +52,7 @@ export const signUpUserService = async ({
   return {
     accessToken,
     user: {
-      _id: newUser._id,
+      _id: newUser._id.toString(),
       accountId: newUser.accountId,
     },
   };
@@ -86,7 +86,7 @@ export const signInUserService = async ({
   return {
     accessToken,
     user: {
-      _id: user._id,
+      _id: user._id.toString(),
       accountId: user.accountId,
     },
   };

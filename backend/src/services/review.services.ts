@@ -1,4 +1,9 @@
-import type { CreateReviewBody, ReviewParams } from '@/types/review';
+import type {
+  CreateReviewBody,
+  DeleteReviewBody,
+  ReviewParams,
+  UpdateReviewBody,
+} from '@/types/review';
 import { ReviewError } from '@/errors/ReviewError';
 import ReviewModel from '@/models/review.model';
 
@@ -21,10 +26,38 @@ export const createReviewService = async (params: ReviewParams, body: CreateRevi
   return await newReview.save();
 };
 
+export const updateReviewService = async (body: UpdateReviewBody) => {
+  const { rating, content, _id } = body;
+
+  const existedReview = await ReviewModel.findById(_id);
+
+  if (!existedReview) {
+    throw new ReviewError(404, '리뷰가 존재하지 않습니다.');
+  }
+
+  if (rating || content) {
+    existedReview.content = content ?? existedReview.content;
+    existedReview.rating = rating ?? existedReview.rating;
+  }
+
+  const updatedReview = await existedReview.save();
+  return updatedReview;
+};
+
+export const deleteReviewService = async (body: DeleteReviewBody) => {
+  const { _id } = body;
+
+  const deletedReview = await ReviewModel.findByIdAndDelete(_id);
+  if (!deletedReview) {
+    throw new ReviewError(404, '리뷰가 존재하지 않습니다.');
+  }
+  return deletedReview;
+};
+
 export const getReviewsByIsbnService = async (params: ReviewParams) => {
   const { isbn13 } = params;
 
-  const reviews = await ReviewModel.find({ isbn13 });
+  const reviews = await ReviewModel.find({ isbn13 }).sort({ createdAt: -1 });
 
   // 해당 도서의 리뷰가 없을 경우에는 빈배열로 반환
   if (reviews.length === 0 || !reviews) {
