@@ -7,7 +7,7 @@ import MainPage from '@/pages/home/MainPage.vue';
 import SignUpPage from '@/pages/auth/signUp/SignUpPage.vue';
 import SignInPage from '@/pages/auth/signIn/SignInPage.vue';
 import BookDetail from '@/pages/books/BookDetail.vue';
-import UserDashboard from '@/pages/user/UserDashboard.vue';
+import DashboardPage from '@/pages/dashboard/DashboardPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -27,8 +27,8 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: ROUTES.DASHBOARD,
-    name: 'UserDashboard',
-    component: UserDashboard,
+    name: 'DashboardPage',
+    component: DashboardPage,
   },
   {
     path: '/books',
