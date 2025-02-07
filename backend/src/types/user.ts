@@ -11,6 +11,8 @@ export interface AuthUser {
   _id: string;
 }
 
+export interface UserProfile extends Omit<User, 'password'> {}
+
 // 회원가입 유저 타입
 export interface SignUpUserBody extends User {
   confirmPassword: string;
@@ -35,3 +37,10 @@ export interface SignInUserServiceResponse {
   accessToken: string;
   user: AuthUser;
 }
+
+export interface GetUserProfileResponse {
+  message: string;
+  userProfile: UserProfile;
+}
+
+export interface GetUserProfileResponseData extends UserProfile {}

@@ -9,6 +9,7 @@ export const ROUTES = {
   CHECK: '/check',
   // /users
   USERS: '/users',
+  MY_PROFILE: '/me',
   // /books
   BOOKS: '/books',
   SEARCH: '/search',
