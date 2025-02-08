@@ -14,6 +14,7 @@ const routes: RouteRecordRaw[] = [
     path: ROUTES.ROOT,
     name: 'MainPage',
     component: MainPage,
+    meta: { requiresAuth: true },
   },
   {
     path: ROUTES.SIGN_UP,
@@ -29,6 +30,7 @@ const routes: RouteRecordRaw[] = [
     path: ROUTES.DASHBOARD,
     name: 'DashboardPage',
     component: DashboardPage,
+    meta: { requiresAuth: true },
   },
   {
     path: '/books',
@@ -37,6 +39,7 @@ const routes: RouteRecordRaw[] = [
         path: ROUTES.BOOK_DETAIL(),
         name: 'BookDetail',
         component: BookDetail,
+        meta: { requiresAuth: true },
       },
     ],
   },
@@ -52,11 +55,14 @@ router.beforeEach((to, _, next) => {
   const authState = useAuthStore();
   const isAuth = authState.isLoggedIn;
 
-  if (to.path === '/' && !isAuth) {
-    next({ name: 'SignInPage' });
-  } else {
-    next();
+  if (isAuth && (to.name === 'SignUpPage' || to.name === 'SignInPage')) {
+    return next({ name: 'MainPage' });
   }
+
+  if (!isAuth && to.meta.requiresAuth) {
+    return next({ name: 'SignInPage' });
+  }
+  next();
 });
 
 export default router;
