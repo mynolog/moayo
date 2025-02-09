@@ -66,3 +66,13 @@ export const getReviewsByIsbnService = async (params: ReviewParams) => {
 
   return reviews;
 };
+
+export const getReviewsByUserIdService = async (userId: string) => {
+  const reviews = await ReviewModel.find({ user_id: userId }).sort({ createdAt: -1 });
+
+  if (reviews.length === 0 || !reviews) {
+    return [];
+  }
+
+  return reviews;
+};
