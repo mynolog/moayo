@@ -5,7 +5,7 @@ import type {
   ReviewParams,
   UpdateReviewBody,
 } from '@/types/review';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import type { AuthRequest } from '@/types/express';
 import { ReviewError } from '@/errors/ReviewError';
 import {
@@ -13,6 +13,7 @@ import {
   updateReviewService,
   deleteReviewService,
   getReviewsByIsbnService,
+  getReviewsByUserIdService,
 } from '@/services/review.services';
 // 리뷰 생성 - Create
 export const createReview = async (
@@ -135,7 +136,7 @@ export const deleteReview = async (
 
 // ISBN으로 리뷰 불러오기 - Read
 export const getReviewsByIsbn = async (
-  req: Request<ReviewParams, {}, {}>,
+  req: AuthRequest<ReviewParams, {}, {}>,
   res: Response,
 ): Promise<void> => {
   const { isbn13 } = req.params;
@@ -147,10 +148,32 @@ export const getReviewsByIsbn = async (
 
   try {
     const response = await getReviewsByIsbnService(req.params);
-    if (!response) {
-      res.status(404).json({ message: '해당 도서의 리뷰를 찾을 수 없습니다.' });
-      return;
+
+    res.status(200).json({
+      message: '리뷰 조회에 성공했습니다.',
+      data: {
+        reviews: response,
+      },
+    });
+  } catch (error) {
+    if (error instanceof ReviewError) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: '리뷰를 불러오는 중 오류가 발생했습니다.', error });
     }
+  }
+};
+
+export const getReviewsByUserId = async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    res.status(403).json({ message: '인증되지 않은 사용자입니다.' });
+    return;
+  }
+  const { _id: userId } = req.user;
+
+  try {
+    const response = await getReviewsByUserIdService(userId);
+
     res.status(200).json({
       message: '리뷰 조회에 성공했습니다.',
       data: {
