@@ -3,6 +3,9 @@ import { defineStore } from 'pinia';
 interface AuthUser {
   accountId: string;
   _id: string;
+  email?: string;
+  birthDate?: Date;
+  gender?: 'male' | 'female' | 'other';
 }
 
 interface AuthState {
