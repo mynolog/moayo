@@ -9,7 +9,6 @@ export const getUserProfileService = async (_id: string) => {
   }
 
   const userProfile = {
-    accountId: user.accountId,
     email: user?.email,
     birthDate: user?.birthDate,
     gender: user?.gender,

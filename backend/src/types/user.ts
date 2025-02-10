@@ -40,7 +40,7 @@ export interface SignInUserServiceResponse {
 
 export interface GetUserProfileResponse {
   message: string;
-  userProfile: UserProfile;
+  userProfile: GetUserProfileResponseData;
 }
 
-export interface GetUserProfileResponseData extends UserProfile {}
+export interface GetUserProfileResponseData extends Omit<User, 'accountId' | 'password'> {}
