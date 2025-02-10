@@ -1,5 +1,4 @@
 export interface UserProfile {
-  accountId: string;
   email?: string;
   birthDate?: Date;
   gender?: 'male' | 'female' | 'other';
