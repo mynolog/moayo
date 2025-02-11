@@ -7,6 +7,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
 
   MY_PROFILE: '/users/me',
+  MY_REVIEWS: '/users/reviews',
 
   BOOKS: '/books',
   BOOK_SEARCH: '/books/search',
