@@ -2,6 +2,7 @@
   <label class="flex flex-col space-y-1">
     <span class="text-sm text-gray-500">{{ label }}</span>
     <input
+      ref="inputRef"
       :value="modelValue"
       :type="type"
       :placeholder="placeholder"
@@ -12,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 const { modelValue, type, placeholder, label } = defineProps({
   modelValue: {
     type: String,
@@ -32,6 +34,14 @@ const { modelValue, type, placeholder, label } = defineProps({
   className: {
     type: String,
     default: '',
+  },
+});
+
+const inputRef = ref<HTMLInputElement | null>(null);
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus();
   },
 });
 

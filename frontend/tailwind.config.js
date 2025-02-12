@@ -23,6 +23,9 @@ export default {
           800: '#0F7F5F',
           900: '#0B5A47',
         },
+        violet: {
+          400: '#9b59b6',
+        },
       },
       fontFamily: {
         'gothic-a1': ['Gothic A1', 'serif'],

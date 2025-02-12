@@ -76,7 +76,7 @@ export const signInUser = async (
   const { accountId, password } = req.body;
 
   if (!accountId || !password) {
-    res.status(400).json({ message: '계정 ID와 비밀번호는 필수입니다.' });
+    res.status(400).json({ message: '아이디와 비밀번호는 필수입니다.' });
     return;
   }
 
@@ -98,8 +98,16 @@ export const signInUser = async (
 
     res.status(200).json({ message: '로그인 성공했습니다.', user });
   } catch (error) {
-    console.error(`로그인 처리 중 오류가 발생했습니다: ${error}`);
-    res.status(500).json({ message: '로그인 처리 중 서버 오류가 발생했습니다.' });
+    if (error instanceof AuthenticationError) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else if (error instanceof ConfigurationError) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else {
+      console.error(error);
+      res.status(500).json({
+        message: '로그인 처리 중 서버 오류가 발생했습니다.',
+      });
+    }
   }
 };
 
