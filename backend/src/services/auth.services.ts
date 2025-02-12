@@ -65,7 +65,7 @@ export const signInUserService = async ({
   const user = await UserModel.findOne({ accountId });
 
   if (!user || !(await user.verifyPassword(password))) {
-    throw new AuthenticationError(401, '계정 ID 또는 비밀번호가 일치하지 않습니다.');
+    throw new AuthenticationError(401, '아이디 또는 비밀번호가 일치하지 않습니다.');
   }
 
   const accessToken = jwt.sign(
