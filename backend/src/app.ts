@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { corsOptions } from './config/cors';
 import connectDB from './config/db';
 import routes from './routes';
+import { authMiddleware } from './middlewares/auth.middleware';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,6 +17,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(authMiddleware);
 
 app.use('/api', routes);
 

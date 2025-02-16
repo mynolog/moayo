@@ -5,7 +5,7 @@ import type {
   SignUpUserServiceResponse,
 } from '@/types/user';
 import jwt from 'jsonwebtoken';
-import UserModel from '@/models/user.model';
+import UserModel, { UserDocument } from '@/models/user.model';
 import { ConfigurationError } from '@/errors/ConfigurationError';
 import { AuthenticationError } from '@/errors/AuthenticationError';
 
@@ -30,7 +30,7 @@ export const signUpUserService = async ({
     password: hashedPassword,
     birthDate,
     gender,
-  });
+  }) as UserDocument;
 
   await newUser.save();
 
@@ -52,6 +52,7 @@ export const signUpUserService = async ({
   return {
     accessToken,
     user: {
+      _id: newUser._id.toString(),
       accountId: newUser.accountId,
     },
   };
@@ -64,7 +65,7 @@ export const signInUserService = async ({
   const user = await UserModel.findOne({ accountId });
 
   if (!user || !(await user.verifyPassword(password))) {
-    throw new AuthenticationError(401, '계정 ID 또는 비밀번호가 일치하지 않습니다.');
+    throw new AuthenticationError(401, '아이디 또는 비밀번호가 일치하지 않습니다.');
   }
 
   const accessToken = jwt.sign(
@@ -85,6 +86,7 @@ export const signInUserService = async ({
   return {
     accessToken,
     user: {
+      _id: user._id.toString(),
       accountId: user.accountId,
     },
   };

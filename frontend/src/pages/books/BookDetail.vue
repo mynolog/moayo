@@ -7,14 +7,17 @@
           <h3 class="text-lg md:text-2xl font-bold">
             {{ formatTitle(data.bookDetail.title) }}
           </h3>
-          <span v-show="data.bookDetail.subInfo.subTitle" class="text-sm md:text-lg text-mint-900">
+          <span
+            v-show="data.bookDetail.subInfo.subTitle"
+            class="text-sm md:text-md text-soft-blue-600"
+          >
             - {{ data.bookDetail.subInfo.subTitle }}
           </span>
         </div>
       </div>
 
+      <!-- 도서 저자, 출판사, 출간일, 원제목 -->
       <div class="relative flex flex-col overflow-visible px-4">
-        <!-- 도서 저자, 출판사, 출간일, 원제목 -->
         <div class="grid md:grid-cols-3 grid-cols-1 gap-5 mt-6 pb-6 border-b border-gray-200">
           <div class="flex flex-col gap-4 text-sm text-gray-600 w-full">
             <div class="grid grid-cols-[2fr_8fr]">
@@ -52,8 +55,29 @@
           </div>
         </div>
       </div>
+
+      <!-- 도서 리뷰 -->
+      <div class="w-full grid grid-cols-[3fr_7fr] px-4 py-5">
+        <h4 class="text-xl font-bold">짧은 리뷰</h4>
+        <div class="flex flex-col gap-4">
+          <review-create-form />
+          <div class="border-b border-gray-200 py-3"></div>
+
+          <div v-if="reviewsData" class="w-full">
+            <ul v-if="!isReviewsLoading">
+              <li v-for="review in reviewsData" class="w-full h-20 grid grid-cols-[3fr_7fr]">
+                <review-rating-viewer :reviewRating="review.rating" />
+                <div class="w-full flex items-center">
+                  <review-content-viewer :review="review" />
+                </div>
+              </li>
+            </ul>
+            <ui-loading-spiner v-else />
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-else-if="isLoading">도서 정보 불러오는 중..</div>
+    <ui-loading-spiner v-else-if="isLoading" />
     <div v-else-if="error">도서 정보 불러오는 중 에러 발생</div>
   </main-layout>
 </template>
@@ -62,11 +86,18 @@
 import { useRoute } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { useBookDetail } from '@/composables/useBookDetail';
+import { useBookReviews } from '@/composables/useBookReviews';
+import ReviewRatingViewer from '@/components/review/ReviewRatingViewer.vue';
+import ReviewContentViewer from '@/components/review/ReviewContentViewer.vue';
+import ReviewCreateForm from '@/components/review/ReviewCreateForm.vue';
+import UiLoadingSpiner from '@/components/ui/UiLoadingSpiner.vue';
 
 const route = useRoute();
 const isbn13 = route.params.isbn13 as string;
 
 const { data, isLoading, error } = useBookDetail(isbn13);
+//TODO: 리뷰 불러오기 에러 핸들링 추가
+const { reviewsData, isReviewsLoading } = useBookReviews(isbn13);
 
 const formatTitle = (title: string) => {
   return title.split(' - ')[0];

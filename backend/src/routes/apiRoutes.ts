@@ -9,6 +9,8 @@ export const ROUTES = {
   CHECK: '/check',
   // /users
   USERS: '/users',
+  MY_REVIEWS: '/reviews',
+  MY_PROFILE: '/me',
   // /books
   BOOKS: '/books',
   SEARCH: '/search',
