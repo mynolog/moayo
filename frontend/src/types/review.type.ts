@@ -17,3 +17,17 @@ export interface BookReviewsResponse {
 export interface BookReviewsResponseData {
   reviews: BookReview[];
 }
+
+export interface SubmitReviewResponse {
+  message: string;
+  newReview: SubmitReviewResponseData;
+}
+export interface SubmitReviewResponseData {
+  newReview: Omit<BookReview, 'user_id'>;
+}
+
+export interface SubmitReviewForm {
+  accountId: string;
+  rating: number;
+  content: string;
+}
